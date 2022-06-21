@@ -36,6 +36,7 @@ public class GameController : MonoBehaviour
     private void Awake()
     {
         PopulateDatabase();
+        //Debug.Log("PopulateDatabase was called from GameController.Awake!");
     }
 
     private void Start()
