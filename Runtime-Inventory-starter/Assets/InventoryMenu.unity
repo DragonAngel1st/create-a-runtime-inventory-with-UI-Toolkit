@@ -391,7 +391,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b1e8ac6521056f4a90246f0d4f1cb6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IconSprites: []
+  IconSprites:
+  - {fileID: 21300000, guid: e745013d85ff9a146b6e708db8d6715d, type: 3}
+  - {fileID: 21300000, guid: bcc5e8aeb794834419ec36a8c5982825, type: 3}
+  - {fileID: 21300000, guid: 57a87035364045d4ab424df0cbd5e155, type: 3}
 --- !u!4 &1639945830
 Transform:
   m_ObjectHideFlags: 0
