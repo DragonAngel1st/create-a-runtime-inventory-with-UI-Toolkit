@@ -19,6 +19,7 @@ public class InventorySlot : VisualElement
         Icon.AddToClassList("slotIcon");
         AddToClassList("slot_container");
 
+        RegisterCallback<PointerDownEvent>(OnPointerDown);
 
     }
 
@@ -32,6 +33,24 @@ public class InventorySlot : VisualElement
         ItemGuid = "";
         Icon.image = null;
     }
+
+    private void OnPointerDown(PointerDownEvent evt)
+    {
+        //Not the left mouse button
+        if (evt.button != 0 || ItemGuid.Equals(""))
+        {
+            return;
+        }
+
+        //Clear the image
+        Icon.image = null;
+
+        Debug.Log("Picked-up slot.ItemGuid: " + ItemGuid);
+
+        //Start the drag
+        InventoryUIController.StartDrag(evt.position, this);
+    }
+
 
     #region UXML
     [Preserve]

@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 public class InventoryUIController : MonoBehaviour
@@ -37,7 +39,10 @@ public class InventoryUIController : MonoBehaviour
 
         m_GhostIcon.RegisterCallback<PointerMoveEvent>(OnPointerMove);
         m_GhostIcon.RegisterCallback<PointerUpEvent>(OnPointerUp);
+        
     }
+
+
 
     private void OnPointerUp(PointerUpEvent evt)
     {
@@ -48,24 +53,33 @@ public class InventoryUIController : MonoBehaviour
         //Check to see if they are dropping the ghost icon over any inventory slots.
         IEnumerable<InventorySlot> slots = InventoryItems.Where(x =>
                x.worldBound.Overlaps(m_GhostIcon.worldBound));
+
         //Found at least one
         if (slots.Count() != 0)
         {
-            InventorySlot closestSlot = slots.OrderBy(x => Vector2.Distance
+           InventorySlot closestSlot = slots.OrderBy(x => Vector2.Distance
                (x.worldBound.position, m_GhostIcon.worldBound.position)).First();
 
-            //Set the new inventory slot with the data
-            closestSlot.HoldItem(GameController.GetItemByGuid(m_OriginalSlot.ItemGuid));
+            //only if the icon was not droped on same slot.
+            if (!closestSlot.Equals(m_OriginalSlot))
+            {
+                //Set the new inventory slot with the data
+                closestSlot.HoldItem(GameController.GetItemByGuid(m_OriginalSlot.ItemGuid));
 
-            //Clear the original slot
-            m_OriginalSlot.DropItem();
+                //Clear the original slot 
+                m_OriginalSlot.DropItem();
+            }
+            else
+            {
+                m_OriginalSlot.Icon.image = GameController.GetItemByGuid(m_OriginalSlot.ItemGuid).Icon.texture;
+            }
         }
         //Didn't find any (dragged off the window)
         else
         {
-            m_OriginalSlot.Icon.image =
-                  GameController.GetItemByGuid(m_OriginalSlot.ItemGuid).Icon.texture;
+            m_OriginalSlot.Icon.image = GameController.GetItemByGuid(m_OriginalSlot.ItemGuid).Icon.texture;
         }
+
         //Clear dragging related visuals and data
         m_IsDragging = false;
         m_OriginalSlot = null;
